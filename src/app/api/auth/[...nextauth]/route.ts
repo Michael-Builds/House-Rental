@@ -1,6 +1,6 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { AuthOptions } from "next-auth";
-import prisma from "../../libs/prismadb"
+import prisma from "../../../libs/prismadb"
 import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
@@ -33,6 +33,7 @@ export const authOptions: AuthOptions = {
                         email: credentials.email
                     }
                 });
+
                 if (!user || !user?.hashedPassword) {
                     throw new Error('Invalid credentials')
                 }
@@ -51,14 +52,15 @@ export const authOptions: AuthOptions = {
         })
     ],
     pages: {
-        signIn: '/'
+        signIn: '/',
     },
 
     debug: process.env.NODE_ENV === 'development',
     session: {
-        strategy :"jwt"
+        strategy: "jwt"
     },
     secret: process.env.NEXTAUTH_SECRET,
 }
 
-export default NextAuth(authOptions)
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }

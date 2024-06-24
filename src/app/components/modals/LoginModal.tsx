@@ -2,7 +2,7 @@
 
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { AiFillGithub } from "react-icons/ai"
@@ -24,16 +24,19 @@ const LoginModal = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FieldValues>({
     defaultValues: {
       email: "",
-      password: ""
-    }
+      password: "",
+    },
   })
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
- 
+
+    console.log("Credentials:", data)
+
     signIn("credentials", {
       ...data,
       redirect: false,
@@ -44,11 +47,13 @@ const LoginModal = () => {
         toast.success("Logged in")
         router.refresh()
         loginModal.onClose()
+        reset()
       }
 
       if (callback?.error) {
         toast.error(callback.error)
       }
+      console.log("SignIn Callback:", callback)
     })
   }
 
@@ -108,13 +113,18 @@ const LoginModal = () => {
     </div>
   )
 
+  const handleClose = useCallback(() => {
+    reset()
+    loginModal.onClose()
+  }, [loginModal, reset])
+
   return (
     <Modal
       disabled={isLoading}
       isOpen={loginModal.isOpen}
       title="Login"
       actionLabel="Continue"
-      onClose={loginModal.onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}

@@ -20,6 +20,7 @@ const RegisterModal = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm<FieldValues>({
     defaultValues: {
       name: "",
@@ -30,17 +31,18 @@ const RegisterModal = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
-
     axios
       .post("/api/register", data)
       .then(() => {
+        toast.success("Successfully registered")
         registerModal.onClose()
+        reset() 
       })
       .catch((error) => {
         toast.error("Oops, something went wrong")
       })
       .finally(() => {
-        setIsLoading(true)
+        setIsLoading(false)
       })
   }
 
@@ -94,14 +96,24 @@ const RegisterModal = () => {
         icon={AiFillGithub}
         onClick={() => {}}
       />
-      <div className="text-neutral-500 text-center mt-4 lg:-mt-1 font-light">
+      <div className="text-neutral-500 text-center mt-4 font-light">
         <div className="justify-center flex flex-row items-center gap-2">
           <div>Already have an account?</div>
-          <div onClick={registerModal.onClose} className="text-neutral-800 cursor-pointer hover:underline">Login</div>
+          <div
+            onClick={registerModal.onClose}
+            className="text-neutral-800 cursor-pointer hover:underline"
+          >
+            Login
+          </div>
         </div>
       </div>
     </div>
   )
+
+  const handleClose = useCallback(() => {
+    reset() 
+    registerModal.onClose()
+  }, [registerModal, reset])
 
   return (
     <Modal
@@ -109,7 +121,7 @@ const RegisterModal = () => {
       isOpen={registerModal.isOpen}
       title="Register"
       actionLabel="Continue"
-      onClose={registerModal.onClose}
+      onClose={handleClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}
       footer={footerContent}
