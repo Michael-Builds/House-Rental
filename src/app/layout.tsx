@@ -6,6 +6,7 @@ import RegisterModal from "./components/modals/RegisterModal"
 import ToasterProvider from "./providers/ToasterProvider"
 import LoginModal from "./components/modals/LoginModal"
 import ClientOnly from "./components/ClientOnly"
+import getCurrentUser from "./actions/getCurrentUser"
 
 export const metadata: Metadata = {
   title: "iRENT Services",
@@ -14,11 +15,13 @@ export const metadata: Metadata = {
 
 const font = Nunito({ subsets: ["latin"] })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const currentUser = await getCurrentUser()
+
   return (
     <html lang="en">
       <body className={font.className}>
@@ -26,7 +29,7 @@ export default function RootLayout({
           <ToasterProvider />
           <LoginModal />
           <RegisterModal />
-          <NavBar />
+          <NavBar currentUser={currentUser} />
         </ClientOnly>
         {children}
       </body>
