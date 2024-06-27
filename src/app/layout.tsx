@@ -7,6 +7,7 @@ import ToasterProvider from "./providers/ToasterProvider"
 import LoginModal from "./components/modals/LoginModal"
 import ClientOnly from "./components/ClientOnly"
 import getCurrentUser from "./actions/getCurrentUser"
+import RentModal from "./components/modals/RentModal"
 
 export const metadata: Metadata = {
   title: "iRENT Services",
@@ -27,11 +28,12 @@ export default async function RootLayout({
       <body className={font.className}>
         <ClientOnly>
           <ToasterProvider />
+          <RentModal />
           <LoginModal />
           <RegisterModal />
           <NavBar currentUser={currentUser} />
         </ClientOnly>
-        {children}
+        <div className="pb-20 pt-28">{children}</div>
       </body>
     </html>
   )
