@@ -6,6 +6,7 @@ import useCountries from "../../hooks/useCountries"
 import Avatar from "../Avatar"
 import ListingCategory from "./ListingCategory"
 import dynamic from "next/dynamic"
+import { pluralize } from "../../msc/functions"
 
 const Map = dynamic(() => import("../Map"), {
   ssr: false,
@@ -42,9 +43,9 @@ const ListingInfo: React.FC<ListingInfoProps> = ({
           <Avatar src={user?.image} />
         </div>
         <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
-          <div>{guestCount} guests</div>
-          <div>{roomCount} rooms</div>
-          <div>{bathroomCount} bathrooms</div>
+          <div>{pluralize(guestCount, "guest", "guests")}</div>
+          <div>{pluralize(roomCount, "room", "rooms")}</div>
+          <div>{pluralize(bathroomCount, "bathroom", "bathrooms")}</div>
         </div>
       </div>
       <hr />
