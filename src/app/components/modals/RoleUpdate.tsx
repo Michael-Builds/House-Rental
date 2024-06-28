@@ -11,17 +11,23 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import useLoginModal from "../../hooks/useLoginModal"
 import { signOut } from "next-auth/react"
+import Select from "react-select"
 
 enum STEPS {
   USER_SELECTION = 0,
   ROLE_ASSIGNMENT = 1,
 }
 
-interface User {
+interface UserProps {
   id: string
   email: string
   name: string
   role: string
+}
+
+interface OptionTypeProps {
+  value: string
+  label: string
 }
 
 const RoleUpdate = () => {
@@ -30,7 +36,7 @@ const RoleUpdate = () => {
   const loginModal = useLoginModal()
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState(STEPS.USER_SELECTION)
-  const [users, setUsers] = useState<User[]>([])
+  const [users, setUsers] = useState<UserProps[]>([])
 
   const {
     register,
@@ -120,39 +126,54 @@ const RoleUpdate = () => {
     return "Back"
   }, [step])
 
+  const userOptions = users.map((user) => ({
+    value: user.email,
+    label: `${user.email} - ${user.name}`,
+  }))
+
+  const roleOptions: OptionTypeProps[] = [
+    { value: "USER", label: "User" },
+    { value: "LANDLORD", label: "Landlord" },
+    { value: "ADMIN", label: "Admin" },
+  ]
+
   let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading
         title="Select a user"
         subtitle="Choose a user to update their role"
       />
-      <select
-        value={email}
-        onChange={(e) => {
-          setCustomValue("email", e.target.value)
+      <Select
+        value={userOptions.find((option) => option.value === email)}
+        onChange={(option) => {
           const selectedUser = users.find(
-            (user) => user.email === e.target.value
+            (user) => user.email === option?.value
           )
           if (selectedUser) {
+            setCustomValue("email", selectedUser.email)
             setCustomValue("name", selectedUser.name)
             setCustomValue("role", selectedUser.role)
           }
         }}
-        className="w-full p-2 pt-4 pb-4 border border-neutral-400 focus:border focus:border-neutral-600 rounded focus:ring-0 focus:outline-none"
-      >
-        <option value="" disabled className="font-light text-neutral-500 ">
-          Select a user
-        </option>
-        {users.map((user) => (
-          <option
-            key={user.id}
-            value={user.email}
-            className="font-light text-neutral-500"
-          >
-            {user.email}
-          </option>
-        ))}
-      </select>
+        options={userOptions}
+        placeholder="Select a user"
+        isClearable
+        classNamePrefix="react-select"
+        className="react-select-container"
+        styles={{
+          control: (provided) => ({
+            ...provided,
+            padding: "8px",
+            borderColor: "#d1d5db",
+            boxShadow: "none",
+            "&:hover": { borderColor: "#4b5563" },
+          }),
+          option: (provided) => ({
+            ...provided,
+            color: "#374151",
+          }),
+        }}
+      />
       <Input
         id="name"
         label="Name"
@@ -171,24 +192,28 @@ const RoleUpdate = () => {
           title="Assign a role"
           subtitle="Choose a role for the selected user"
         />
-        <select
-          value={role}
-          onChange={(e) => setCustomValue("role", e.target.value)}
-          className="w-full p-2 pt-4 pb-4 border border-neutral-400 focus:border focus:border-neutral-600 rounded focus:ring-0 focus:outline-none"
-        >
-          <option value="" className="font-light text-neutral-500" disabled>
-            Select a role
-          </option>
-          <option value="USER" className="font-light text-neutral-500">
-            User
-          </option>
-          <option value="LANDLORD" className="font-light text-neutral-500">
-            Landlord
-          </option>
-          <option value="ADMIN" className="font-light text-neutral-500">
-            Admin
-          </option>
-        </select>
+        <Select
+          value={roleOptions.find((option) => option.value === role)}
+          onChange={(option) => setCustomValue("role", option?.value)}
+          options={roleOptions}
+          placeholder="Select a role"
+          isClearable
+          classNamePrefix="react-select"
+          className="react-select-container"
+          styles={{
+            control: (provided) => ({
+              ...provided,
+              padding: "8px",
+              borderColor: "#d1d5db",
+              boxShadow: "none",
+              "&:hover": { borderColor: "#4b5563" },
+            }),
+            option: (provided) => ({
+              ...provided,
+              color: "#374151",
+            }),
+          }}
+        />
       </div>
     )
   }
