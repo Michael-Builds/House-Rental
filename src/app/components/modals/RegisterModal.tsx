@@ -39,6 +39,7 @@ const RegisterModal = () => {
       .then(() => {
         toast.success("Successfully registered")
         registerModal.onClose()
+        loginModal.onOpen()
         reset()
       })
       .catch((error) => {
@@ -58,7 +59,6 @@ const RegisterModal = () => {
       <Heading
         title="Welcome to Airbnb"
         subtitle="Create an account!"
-        //   center
       />
       <Input
         id="name"

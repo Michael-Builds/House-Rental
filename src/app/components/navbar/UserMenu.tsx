@@ -9,6 +9,7 @@ import { signOut } from "next-auth/react"
 import { SafeUser } from "../../types"
 import useRentModal from "../../hooks/useRentModal"
 import { useRouter } from "next/navigation"
+import useRoleUpdateModal from "../../hooks/useRoleUpdateModal"
 
 interface UserMenuProps {
   currentUser?: SafeUser | null
@@ -18,6 +19,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   const registerModal = useRegisterModal()
   const loginModal = useLoginModal()
   const rentModal = useRentModal()
+  const roleUpdateModal = useRoleUpdateModal()
   const [isOpen, setIsOpen] = useState(false)
   const router = useRouter()
 
@@ -35,8 +37,113 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       return loginModal.onOpen()
     }
 
+    if (currentUser.role !== "ADMIN" && currentUser.role !== "LANDLORD") {
+      return
+    }
+
     rentModal.onOpen()
   }, [loginModal, currentUser, rentModal])
+
+  const renderMenuItems = () => {
+    if (!currentUser) {
+      return (
+        <>
+          <MenuItem
+            onClick={() => {
+              loginModal.onOpen()
+              toggleOpen()
+            }}
+            label="Login"
+          />
+          <MenuItem
+            onClick={() => {
+              registerModal.onOpen()
+              toggleOpen()
+            }}
+            label="Sign up"
+          />
+        </>
+      )
+    }
+    switch (currentUser.role) {
+      case "LANDLORD":
+        return (
+          <>
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/reservations")
+              }}
+              label="My reservations"
+            />
+            <MenuItem onClick={toggleOpen} label="My properties" />
+            <MenuItem
+              onClick={() => {
+                rentModal.onOpen()
+                toggleOpen()
+              }}
+              label="Airbnb my home"
+            />
+            <hr />
+            <MenuItem onClick={handleLogout} label="Logout" />
+          </>
+        )
+      case "USER":
+        return (
+          <>
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/trips")
+              }}
+              label="My trips"
+            />
+            <MenuItem onClick={toggleOpen} label="My favorites" />
+            <hr />
+            <MenuItem onClick={handleLogout} label="Logout" />
+          </>
+        )
+      case "ADMIN":
+        return (
+          <>
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/trips")
+              }}
+              label="My trips"
+            />
+            <MenuItem onClick={toggleOpen} label="My favorites" />
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/reservations")
+              }}
+              label="My reservations"
+            />
+            <MenuItem onClick={toggleOpen} label="My properties" />
+            <MenuItem
+              onClick={() => {
+                rentModal.onOpen()
+                toggleOpen()
+              }}
+              label="Airbnb my home"
+            />
+            <MenuItem
+              onClick={() => {
+                roleUpdateModal.onOpen()
+                toggleOpen()
+              }}
+              label="Add Landlord"
+            />
+            <hr />
+            <MenuItem onClick={handleLogout} label="Logout" />
+          </>
+        )
+      default:
+        return null
+    }
+  }
 
   return (
     <div className="relative">
@@ -60,7 +167,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       {isOpen && (
         <div className="absolute rounded-md shadown-md w-[40vw] md:w-3/4 bg-white border-[1px] overflow-hidden right-0 top-12 text-sm">
           <div className="flex flex-col cursor-pointer ">
-            {currentUser ? (
+            {/* {currentUser ? (
               <>
                 <MenuItem
                   onClick={() => {
@@ -70,7 +177,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                   label="My trips"
                 />
                 <MenuItem onClick={toggleOpen} label="My favorites" />
-                <MenuItem onClick={toggleOpen} label="My reservations" />
+                <MenuItem
+                  onClick={() => {
+                    toggleOpen()
+                    router.push("/reservations")
+                  }}
+                  label="My reservations"
+                />
                 <MenuItem onClick={toggleOpen} label="My properties" />
                 <MenuItem
                   onClick={() => {
@@ -99,7 +212,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                   label="Sign up"
                 />
               </>
-            )}
+            )} */}
+            {renderMenuItems()}
           </div>
         </div>
       )}
