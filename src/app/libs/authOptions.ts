@@ -37,11 +37,6 @@ export const authOptions: NextAuthOptions = {
                 if (!user || !user?.hashedPassword) {
                     throw new Error('Invalid credentials')
                 }
-
-                if (!user.emailVerified) {
-                    throw new Error('Email not verified')
-                }
-
                 const isCorrectPassword = await bcrypt.compare(
                     credentials.password,
                     user.hashedPassword
@@ -55,18 +50,6 @@ export const authOptions: NextAuthOptions = {
             }
         })
     ],
-    // callbacks: {
-    //     async signIn({ user, account }) {
-    //         if (account?.provider === "credentials") {
-    //             return true
-    //         }
-
-    //         const dbUser = await prisma.user.findUnique({
-    //             where: { email: user.email! }
-    //         });
-    //         return !!dbUser?.emailVerified
-    //     }
-    // },
     pages: {
         signIn: '/',
     },
