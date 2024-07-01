@@ -34,7 +34,7 @@ export async function POST(request: Request) {
             }
         })
 
-        await sendVerificationEmail(email, verificationToken, name);
+        await sendVerificationEmail(email, name);
 
         return NextResponse.json({ message: "Account Created Successfully" }, { status: 201 });
     } catch (error) {
