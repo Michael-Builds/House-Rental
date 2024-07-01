@@ -25,7 +25,7 @@ export default function VerifyEmail() {
       const response = await fetch(`/api/verify-email?token=${token}`)
       if (response.ok) {
         setStatus("Email verified successfully!")
-        setTimeout(() => router.push("/"), 3000) // Redirect to login page after 3 seconds
+        setTimeout(() => router.push("/"), 3000) 
       } else {
         setStatus("Verification failed. Please try again.")
       }
