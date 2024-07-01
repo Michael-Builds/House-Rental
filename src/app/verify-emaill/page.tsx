@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
+import { useRouter, useSearchParams } from "next/navigation"
 
 export default function VerifyEmail() {
   const router = useRouter()
-  const { token } = router.query
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token")
   const [status, setStatus] = useState("Verifying...")
   const [isMounted, setIsMounted] = useState(false)
 
