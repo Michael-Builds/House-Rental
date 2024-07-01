@@ -28,7 +28,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   }, [])
 
   const handleLogout = () => {
-    signOut()
+    signOut({ callbackUrl: "/" })
     toggleOpen()
   }
 
@@ -167,52 +167,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       {isOpen && (
         <div className="absolute rounded-md shadown-md w-[40vw] md:w-3/4 bg-white border-[1px] overflow-hidden right-0 top-12 text-sm">
           <div className="flex flex-col cursor-pointer ">
-            {/* {currentUser ? (
-              <>
-                <MenuItem
-                  onClick={() => {
-                    toggleOpen()
-                    router.push("/trips")
-                  }}
-                  label="My trips"
-                />
-                <MenuItem onClick={toggleOpen} label="My favorites" />
-                <MenuItem
-                  onClick={() => {
-                    toggleOpen()
-                    router.push("/reservations")
-                  }}
-                  label="My reservations"
-                />
-                <MenuItem onClick={toggleOpen} label="My properties" />
-                <MenuItem
-                  onClick={() => {
-                    rentModal.onOpen()
-                    toggleOpen()
-                  }}
-                  label="Airbnb my home"
-                />
-                <hr />
-                <MenuItem onClick={handleLogout} label="Logout" />
-              </>
-            ) : (
-              <>
-                <MenuItem
-                  onClick={() => {
-                    loginModal.onOpen()
-                    toggleOpen()
-                  }}
-                  label="Login"
-                />
-                <MenuItem
-                  onClick={() => {
-                    registerModal.onOpen()
-                    toggleOpen()
-                  }}
-                  label="Sign up"
-                />
-              </>
-            )} */}
             {renderMenuItems()}
           </div>
         </div>

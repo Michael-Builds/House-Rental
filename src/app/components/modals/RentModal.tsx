@@ -121,7 +121,6 @@ const RentModal = () => {
     }
     return "Next"
   }, [step])
-  
 
   const secondaryActionLabel = useMemo(() => {
     if (step === STEPS.CATEGORY) {
