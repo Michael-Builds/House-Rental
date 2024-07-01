@@ -55,19 +55,18 @@ export const authOptions: NextAuthOptions = {
             }
         })
     ],
+    // callbacks: {
+    //     async signIn({ user, account }) {
+    //         if (account?.provider === "credentials") {
+    //             return true
+    //         }
 
-    callbacks: {
-        async signIn({ user, account }) {
-            if (account?.provider === "credentials") {
-                return true
-            }
-
-            const dbUser = await prisma.user.findUnique({
-                where: { email: user.email! }
-            });
-            return !!dbUser?.emailVerified
-        }
-    },
+    //         const dbUser = await prisma.user.findUnique({
+    //             where: { email: user.email! }
+    //         });
+    //         return !!dbUser?.emailVerified
+    //     }
+    // },
     pages: {
         signIn: '/',
     },

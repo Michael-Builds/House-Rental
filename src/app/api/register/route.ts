@@ -2,11 +2,9 @@ import crypto from 'crypto';
 import bcrypt from "bcrypt"
 import prisma from "../../libs/prismadb"
 import { NextResponse } from "next/server"
-import { sendVerificationEmail } from "../../msc/emailService"
+import { sendVerificationEmail } from "../../actions/verifyemail"
 
-export async function POST(
-    request: Request
-) {
+export async function POST(request: Request) {
     try {
         const body = await request.json()
         const { name, email, password } = body
@@ -35,9 +33,9 @@ export async function POST(
             }
         })
 
-        await sendVerificationEmail(email, verificationToken);
+        // await sendVerificationEmail(email, verificationToken, name);
 
-        return NextResponse.json({ message: `User created ${user}. Please verify your email.` }, { status: 201 });
+        return NextResponse.json({ message: "User created. Please verify your email." }, { status: 201 });
     } catch (error) {
         console.error("Registration error:", error);
         return NextResponse.json({ error: "An error occurred during registration" }, { status: 500 })
