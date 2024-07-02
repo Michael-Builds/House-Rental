@@ -12,6 +12,7 @@ interface TripsClientProps {
   reservations: SafeReservations[]
   currentUser?: SafeUser | null
 }
+
 const TripsClient: React.FC<TripsClientProps> = ({
   reservations,
   currentUser,

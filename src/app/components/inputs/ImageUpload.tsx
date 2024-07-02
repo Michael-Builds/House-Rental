@@ -36,13 +36,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value }) => {
       }}
     >
       {({ open }) => {
-        const handleClick = () => {
-          if (open) {
-            open()
-          } else {
-            console.error("Upload widget could not be opened")
-          }
+       const handleClick = () => {
+        if (typeof open === 'function') {
+          open()
+        } else {
+          console.error("Upload widget could not be opened")
         }
+      }
 
         return (
           <div

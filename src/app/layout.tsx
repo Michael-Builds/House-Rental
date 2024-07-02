@@ -9,6 +9,7 @@ import ClientOnly from "./components/ClientOnly"
 import getCurrentUser from "./actions/getCurrentUser"
 import RentModal from "./components/modals/RentModal"
 import RoleUpdate from "./components/modals/RoleUpdate"
+import SearchModal from "./components/modals/SearchModal"
 
 export const metadata: Metadata = {
   title: "iRENT Services",
@@ -29,6 +30,7 @@ export default async function RootLayout({
       <body className={font.className}>
         <ClientOnly>
           <ToasterProvider />
+          <SearchModal />
           <RoleUpdate />
           <RentModal />
           <LoginModal />
