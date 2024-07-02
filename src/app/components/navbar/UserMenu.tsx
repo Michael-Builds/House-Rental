@@ -76,7 +76,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               }}
               label="My reservations"
             />
-            <MenuItem onClick={toggleOpen} label="My properties" />
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/properties")
+              }}
+              label="My properties"
+            />
             <MenuItem
               onClick={() => {
                 rentModal.onOpen()
@@ -98,7 +104,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               }}
               label="My trips"
             />
-            <MenuItem onClick={toggleOpen} label="My favorites" />
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/favorites")
+              }}
+              label="My favorites"
+            />
             <hr />
             <MenuItem onClick={handleLogout} label="Logout" />
           </>
@@ -113,7 +125,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               }}
               label="My trips"
             />
-            <MenuItem onClick={toggleOpen} label="My favorites" />
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/favorites")
+              }}
+              label="My favorites"
+            />
             <MenuItem
               onClick={() => {
                 toggleOpen()
@@ -121,7 +139,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               }}
               label="My reservations"
             />
-            <MenuItem onClick={toggleOpen} label="My properties" />
+            <MenuItem
+              onClick={() => {
+                toggleOpen()
+                router.push("/properties")
+              }}
+              label="My properties"
+            />
             <MenuItem
               onClick={() => {
                 rentModal.onOpen()
